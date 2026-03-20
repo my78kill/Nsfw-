@@ -9,7 +9,7 @@ from nudenet import NudeDetector
 app = FastAPI()
 
 # 🔐 API KEY
-API_KEY = "mysecret123"
+API_KEY = "sk_92KjsH@8sKx_91!dkL"
 
 # 🧠 MODEL (ONNX based)
 detector = NudeDetector()
