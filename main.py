@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Header, HTTPException
 import shutil
 from nudenet import NudeClassifier
 import cv2
@@ -7,10 +7,19 @@ import os
 app = FastAPI()
 classifier = NudeClassifier()
 
+API_KEY = "sk_92KjsH@8sKx_91!dkL"   # 👈 apni strong key rakhna
+
+# -------- SECURITY CHECK --------
+def verify_key(x_api_key):
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=403, detail="Unauthorized")
+
+
 # -------- IMAGE CHECK --------
 def check_image(path):
     result = classifier.classify(path)
     return result[path]['unsafe'] > 0.7
+
 
 # -------- VIDEO CHECK --------
 def check_video(path):
@@ -38,13 +47,16 @@ def check_video(path):
 
 # -------- API ROUTE --------
 @app.post("/check")
-async def check(file: UploadFile = File(...)):
+async def check(file: UploadFile = File(...), x_api_key: str = Header(None)):
+
+    verify_key(x_api_key)  # 🔐 check key
+
     path = file.filename
 
     with open(path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    ext = path.split('.')[-1]
+    ext = path.split('.')[-1].lower()
 
     if ext in ["jpg", "jpeg", "png", "webp"]:
         result = check_image(path)
