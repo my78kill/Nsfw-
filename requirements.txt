@@ -3,3 +3,4 @@ uvicorn
 nudenet
 opencv-python-headless
 python-multipart
+onnxruntime
