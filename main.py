@@ -3,6 +3,8 @@ import shutil
 from nudenet import NudeClassifier
 import cv2
 import os
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 app = FastAPI()
 classifier = NudeClassifier()
