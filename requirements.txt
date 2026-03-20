@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-nudenet
+nudenet==2.0.0
 opencv-python-headless
 python-multipart
 onnxruntime
